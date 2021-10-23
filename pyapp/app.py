@@ -3,7 +3,6 @@ print("hello, world")
 import flask
 import flask_login
 from collections import defaultdict
-from partials import *
 
 SECRET_KEY = "secret_key"
 
@@ -52,7 +51,7 @@ def get_abs(path):
 def index():
     # スタートページを表示
     # return flask.render_template("index.html", navbar=NAVBAR, headend=HEADEND)
-    return flask.render_template("index.html", abs=get_abs)
+    return flask.render_template("index.html", abs_path=get_abs)
 
 
 @app.route("/login.html", methods=["POST", "GET"])
@@ -64,18 +63,18 @@ def login():
             # ユーザーが存在した場合はログイン
             flask_login.login_user(users.get(user_check[flask.request.form["name"]]["id"]))
             flask.flash("ログインしました", "login_success")
-
+            return flask.render_template("dashboard.html")
         else:
             return flask.abort(401)
 
-    return flask.render_template("dashboard.html")
+    return flask.render_template("login.html")
 
 @app.route("/logout", methods=["GET"])
 @flask_login.login_required
 def logout():
     # logoutの処理
     flask_login.logout_user()
-    return flask.render_template("index.html")
+    return flask.render_template("index.html", abs_path=get_abs)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8008, debug=True)
