@@ -53,6 +53,9 @@ def index():
     # return flask.render_template("index.html", navbar=NAVBAR, headend=HEADEND)
     return flask.render_template("index.html", abs_path=get_abs)
 
+@app.route('/css/style.css', methods=["POST", "GET"])
+def css():
+    return flask.render_template("css/style.css", abs_path=get_abs)
 
 @app.route("/login.html", methods=["POST", "GET"])
 def login():

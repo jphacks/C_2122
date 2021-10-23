@@ -12,5 +12,5 @@ npm run hot-reload
 ## 絶対パスで埋め込む方法
 以下のような形で行う
 ```sh
-{{ abs("partials/headend.html") | safe }}
+{{ abs_path("partials/headend.html") | safe }}
 ```
