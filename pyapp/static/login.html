@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <title>スケマ！ ログイン</title>
+        <meta name="description" content="似たスケジュールを持つ人同士をマッチする出会い系スケジュールアプリ">
+        
+        <!-- Shared Head -->
+        {{ abs("partials/headend.html") | safe }}
+
+    </head>
+    <body>
+        <!-- Navigation Bar -->
+        {{ abs("partials/navbar.html") | safe }}
+
+        <div class="wrapper">
+            <h2 class="page-title">Log In</h2>
+            <form action="#">
+                <div>
+                    <label for="name">ユーザーネーム</label>
+                    <input type="text" id="name" name="name">
+                </div>
+                <div>
+                    <label for="password">パスワード</label>
+                    <input type="text" id="password" name="password">
+                </div>
+                <input type="submit" class="button" value="ログイン" formmethod="post">
+            </form>
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul>
+                {% for message in messages %}
+                <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
+        </div>
+    </body>
+</html>
+
+
+    <!-- 
+    bodyのどこかにお願いします！
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %} -->
