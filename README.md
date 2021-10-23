@@ -38,3 +38,10 @@
 #### 製品に取り入れた研究内容（データ・ソフトウェアなど）（※アカデミック部門の場合のみ提出必須）
 * 
 * 
+
+#### テスト方法
+ Docker（Docker Compose）を使用する。このディレクトリで以下のコマンドを実行する。
+```sh
+$ docker compose build
+$ docker compose up
+```

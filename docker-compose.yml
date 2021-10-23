@@ -1,0 +1,10 @@
+version: "3"
+services:
+  app:
+    container_name: pyapp
+    build: ./pyapp
+    ports:
+      - 8008:8008
+    volumes:
+      - ./pyapp:/app
+    env_file: .env
