@@ -1,0 +1,15 @@
+{
+    "scripts": {
+        "hot-reload": "node-sass -w sass/style.scss css/style.css"
+    },
+
+"dependencies": {
+    
+
+    
+
+"node-sass": "^6.0.1"
+    
+
+}
+}
