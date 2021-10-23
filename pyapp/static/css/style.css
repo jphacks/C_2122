@@ -6,6 +6,61 @@ body {
   color: #432; }
   body a {
     text-decoration: none; }
+  body .main-nav {
+    display: flex;
+    font-size: 1.25rem;
+    text-transform: uppercase;
+    margin-top: 34px;
+    list-style: none; }
+  body .main-nav li {
+    margin-left: 36px; }
+  body .main-nav a {
+    color: #432; }
+  body .main-nav a:hover {
+    color: #0bd; }
+  body .page-header {
+    display: flex;
+    justify-content: space-between; }
+  body .wrapper {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 4%; }
+  body .home-content {
+    text-align: center;
+    margin-top: 10%; }
+  body .home-content p {
+    font-size: 1.125rem;
+    margin: 10px 0 42px; }
+  body .page-title {
+    font-size: 5rem;
+    text-transform: uppercase;
+    font-weight: normal; }
+  body .button {
+    font-size: 1.375rem;
+    background: #0bd;
+    color: #fff;
+    border-radius: 5px;
+    padding: 18px 32px; }
+  body .button:hover {
+    background: #0090aa; }
+  body input[type="text"],
+  body textarea {
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px #fff solid;
+    border-radius: 5px;
+    padding: 10px;
+    font-size: 1rem; }
+  body input[type="text"] {
+    width: 100%;
+    max-width: 240px; }
+  body textarea {
+    width: 100%;
+    max-width: 480px;
+    height: 6rem; }
+  body input[type="submit"] {
+    border: none;
+    cursor: pointer;
+    line-height: 1; }
 
 img {
   max-width: 100%; }
