@@ -9,7 +9,7 @@
 - user_id[int] # userテーブルに依存
 - content[string]
 - reserved_id[?int] # 予約が完了していない場合はnull
-
+aaaaa
 # Reserve（予約）
 - id[int]
 - date[date]
