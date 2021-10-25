@@ -84,5 +84,9 @@ def show_dashboard():
     # dashboardの表示
     pass
 
+@app.route("/BBBB", methods=["POST"])
+def move_BBBB():
+    return flask.render_template("reservation.html")
+    #お試し
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8008, debug=True)
