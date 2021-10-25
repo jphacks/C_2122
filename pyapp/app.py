@@ -37,8 +37,8 @@ for i in users.values():
 
 @login_manager.user_loader
 def load_user(user_id):
-    # ユーザが登録済みかをチェック
-    pass
+    return users.get(int(user_id))
+
 
 def get_abs(path):
     # 共通部分の読み込み
