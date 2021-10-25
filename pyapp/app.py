@@ -70,7 +70,7 @@ def login():
         else:
             return flask.abort(401)
 
-    return flask.render_template("login.html")
+    return flask.render_template("login.html", abs_path=get_abs)
 
 @app.route("/logout", methods=["GET"])
 @flask_login.login_required
