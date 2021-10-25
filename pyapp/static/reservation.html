@@ -1,1 +1,41 @@
 <h1>reservation</h1>
+<section id="box1" class="box" data-section-name="Top">
+    <div class="ui raised very padded text container segment padding"
+        style="margin-top: 100px; background-color: #f2f4f6;">
+        <div class="black">
+            <h1 class="font_rock">使い方</h1>
+            <ol style="line-height: 40px;">
+                <li>日程を選択しよう</li>
+                <li>目的を書こう</li>
+                <li>確定ボタンを押してRoomを作成しよう</li>
+            </ol>
+        </div>
+    </div>
+</section>
+<div id="form-main">
+    <div id="form-div">
+        <form class="form" id="form1">
+            <div class="name">
+                <input name="name" type="text"
+                    class="validate[required,custom[onlyLetter],length[0,100]] feedback-input" placeholder="Room名"
+                    id="name" />
+            </div>
+            <label>
+                日付
+                <input type="date" name="date">
+            </label>
+            <label>
+                時刻
+                <input type="time" name="time">
+            </label>
+            <div class="text">
+                <textarea name="text" class="validate[required,length[6,300]] feedback-input" id="comment"
+                    placeholder="目的" rows="3"></textarea>
+            </div>
+            <div class="submit">
+                <input type="submit" value="作成する" id="button-blue" />
+                <div class="ease"></div>
+            </div>
+        </form>
+    </div>
+</div>
