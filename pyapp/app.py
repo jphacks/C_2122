@@ -88,5 +88,10 @@ def show_dashboard():
 def move_BBBB():
     return flask.render_template("reservation.html")
     #お試し
+
+@app.route("/CCCC", methods=["POST"])
+def move_CCCC():
+    return flask.render_template("dashboard.html")
+    #お試し
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8008, debug=True)
