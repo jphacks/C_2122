@@ -1,16 +1,16 @@
-from app import Base, engine
+from app import engine
 from sqlalchemy import create_engine, Column, Integer, String, DateTime
 from sqlalchemy.orm import backref, relationship
+from flask_login import UserMixin
 
-
-class UserTable(Base):
+class UserTable(UserMixin):
     __tablename__ = 'users'
     id = Column(Integer, nullable=False, primary_key=True)
     user_name = Column(String, nullable=False)
     user_password = Column(String)
 
 
-class PurposeTable(Base):
+class PurposeTable(UserMixin):
     __tablename__ = "purposes"
     id = Column(Integer, nullable=False, primary_key=True)
     date = Column(DateTime, default=datetime.datetime.now(pytz.timezone('Asia/Tokyo')))
@@ -22,7 +22,7 @@ class PurposeTable(Base):
         "UserTable", backref=backref("purposes", order_by=id))
 
 
-class ReserveTable(Base):
+class ReserveTable(UserMixin):
     __tablename__ = "reserves"
     id = Column(Integer, nullable=False, primary_key=True)
     date = Column(DateTime, default=datetime.datetime.now(pytz.timezone('Asia/Tokyo')))
@@ -32,7 +32,7 @@ class ReserveTable(Base):
         "PurposeTable", backref=backref("reserves", order_by=id))
 
 
-class ChatTable(Base):
+class ChatTable(UserMixin):
     __tablename__ = "chats"
     reserve_id = Column(Integer, ForeignKey("ReserveTable.id"))
     date = Column(DateTime, default=datetime.datetime.now(pytz.timezone('Asia/Tokyo')))

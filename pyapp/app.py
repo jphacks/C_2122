@@ -15,7 +15,6 @@ SECRET_KEY = "secret_key"
 app = flask.Flask(
         __name__,
         template_folder="static")
-Base = declarative_base()
 
 app.config["SECRET_KEY"] = SECRET_KEY
 app.config["SQLALCHEMY_DATABASE_URI"] = "" #データベースのURIを入力
