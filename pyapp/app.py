@@ -66,11 +66,11 @@ def login():
             # ユーザーが存在した場合はログイン
             flask_login.login_user(users.get(user_check[flask.request.form["name"]]["id"]))
             flask.flash("ログインしました", "login_success")
-            return flask.render_template("dashboard.html")
+            return flask.redirect("/") # ログイン後はトップページへ遷移 → ダッシュボードページ作成後はそちらへ変更
         else:
             return flask.abort(401)
 
-    return flask.render_template("login.html")
+    return flask.render_template("login.html", abs_path=get_abs)
 
 @app.route("/logout", methods=["GET"])
 @flask_login.login_required
@@ -78,6 +78,11 @@ def logout():
     # logoutの処理
     flask_login.logout_user()
     return flask.render_template("index.html", abs_path=get_abs)
+
+@app.route("/dashboard", methods=["POST", "GET"])
+def show_dashboard():
+    # dashboardの表示
+    pass
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8008, debug=True)
