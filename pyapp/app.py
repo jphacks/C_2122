@@ -1,20 +1,35 @@
+from sqlalchemy import Column, Integer, String, create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+import models.database as modeldb
+
 print("hello, world")
+
+from collections import defaultdict
 
 import flask
 import flask_login
-from collections import defaultdict
 
 SECRET_KEY = "secret_key"
 
 app = flask.Flask(
         __name__,
         template_folder="static")
+Base = declarative_base()
 
-app.secret_key = SECRET_KEY
+app.config["SECRET_KEY"] = SECRET_KEY
+app.config["SQLALCHEMY_DATABASE_URI"] = "" #データベースのURIを入力
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = True
 login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
 
-class User(flask_login.UserMixin):
+engine = create_engine(db_uri)
+session_factory = sessionmaker(bind=engine)
+session = session_factory()
+
+modeldb.create_database()
+
+class TestUser(flask_login.UserMixin):
     # テストユーザ用のクラス
     def __init__(self, id, name, password):
         self.id = id
@@ -23,8 +38,8 @@ class User(flask_login.UserMixin):
 
 users = {
     # テストユーザ
-    1: User(1, "user01", "password"),
-    2: User(2, "user02", "password")
+    1: TestUser(1, "user01", "password"),
+    2: TestUser(2, "user02", "password")
 }
 
 # ユーザチェック用の辞書
@@ -73,11 +88,10 @@ def login():
     return flask.render_template("login.html", abs_path=get_abs)
 
 @app.route("/logout", methods=["GET"])
-@flask_login.login_required
 def logout():
     # logoutの処理
     flask_login.logout_user()
-    return flask.render_template("index.html", abs_path=get_abs)
+    return flask.redirect("/")
 
 @app.route("/dashboard", methods=["POST", "GET"])
 def show_dashboard():
