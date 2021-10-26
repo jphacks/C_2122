@@ -1,75 +1,33 @@
-from sqlalchemy import Column, Integer, String, create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-import models.database as modeldb
-
-print("hello, world")
-
+import sqlite3
 from collections import defaultdict
 
 import flask
 import flask_login
-<<<<<<< HEAD
-=======
-from collections import defaultdict
-from flask import *
-import sqlite3
->>>>>>> 27175da29a4ab2a4902ef476b6288327ff9a1994
+from sqlalchemy import Column, Integer, String, create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+
+import models.database as modeldb
 
 SECRET_KEY = "secret_key"
 
 app = flask.Flask(
         __name__,
         template_folder="static")
-
+app.config["SECRET_KEY"] = SECRET_KEY
 login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
-app.config["SECRET_KEY"] = SECRET_KEY
 
-# データベース
-Base = declarative_base()
-app.config["SQLALCHEMY_DATABASE_URI"] = ""  # データベースのURIを入力
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-engine = create_engine(db_uri)
-session_factory = sessionmaker(bind=engine)
-session = session_factory()
-Base.query = session.query_property()
-
-# 今まで利用していたUserモデルと、ログイン機能用のUserMixinを合成
-class LoginUser(UserMixin, modeldb.UserTable):
-    # このモデルを介して認証ユーザーIDを内部で取得するためのメソッド
+class User(flask_login.UserMixin):
+    def __init__(self, user_id):
+        self.id = user_id
     def get_id(self):
         return self.id
-
-class TestUser(flask_login.UserMixin):
-    # テストユーザ用のクラス
-    def __init__(self, id, name, password):
-        self.id = id
-        self.name = name
-        self.password = password
-
-users = {
-    # テストユーザ
-    1: TestUser(1, "user01", "password"),
-    2: TestUser(2, "user02", "password")
-}
-
-# ユーザチェック用の辞書
-nested_dict = lambda: defaultdict(nested_dict)
-user_check = nested_dict()
-for i in users.values():
-    user_check[i.name]["password"] = i.password
-    user_check[i.name]["id"] = i.id
 
 
 @login_manager.user_loader
 def load_user(user_id):
-    return users.get(int(user_id))
-
-"""
-def load_user(user_id):
-    return LoginUser.query.filter(LoginUser.id == user_id).one_or_none()
-"""
+    return User(user_id)
 
 
 def get_abs(path):
@@ -97,12 +55,20 @@ def login():
     # loginページの処理
     if(flask.request.method == "POST"):
         # ユーザーチェック
-        if(flask.request.form["name"] in user_check and flask.request.form["password"] == user_check[flask.request.form["name"]]["password"]):
-            # ユーザーが存在した場合はログイン
-            flask_login.login_user(users.get(user_check[flask.request.form["name"]]["id"]))
-            flask.flash("ログインしました", "login_success")
-            return flask.redirect("/") # ログイン後はトップページへ遷移 → ダッシュボードページ作成後はそちらへ変更
+        conn = sqlite3.connect('chat_test.db')
+        c = conn.cursor()
+        try:
+            c.execute(
+                "select * from user where username = '{}' and password = '{}'".format(flask.request.form["name"], flask.request.form["password"]))
+        except:
+            return flask.abort(401)
+        user = c.fetchall()
+        if user != []:
+            conn.close()
+            flask_login.login_user(User(user[0][0]))
+            return flask.redirect("/")
         else:
+            print(c.fetchall())
             return flask.abort(401)
     return flask.render_template("login.html", abs_path=get_abs)
 
@@ -120,8 +86,6 @@ def show_dashboard():
     # dashboardの表示
     pass
 
-<<<<<<< HEAD
-=======
 #ここからあああああ、チャットオオオオ処理
 @app.route("/room.html")
 def room():
@@ -157,15 +121,14 @@ def chcss():
 
 @app.route("/chat.html/<int:reserveid>", methods=["POST"])
 def chat_post(reserveid):
-    chat_message = request.form.get("input_message")
+    chat_message = flask.request.form.get("input_message")
     conn = sqlite3.connect('chat_test.db')
     c = conn.cursor()
     c.execute("insert into chat values(?,101,?,101)",
     (reserveid, chat_message))
     conn.commit()
     c.close()
-    return redirect("/chat.html/{}".format(reserveid))
->>>>>>> 27175da29a4ab2a4902ef476b6288327ff9a1994
+    return flask.redirect("/chat.html/{}".format(reserveid))
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8008, debug=True)
