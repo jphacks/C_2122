@@ -1,16 +1,15 @@
-from app import engine
+from app import Base, engine
 from sqlalchemy import create_engine, Column, Integer, String, DateTime
 from sqlalchemy.orm import backref, relationship
-from flask_login import UserMixin
 
-class UserTable(UserMixin):
+class UserTable(Base):
     __tablename__ = 'users'
     id = Column(Integer, nullable=False, primary_key=True)
     user_name = Column(String, nullable=False)
     user_password = Column(String)
 
 
-class PurposeTable(UserMixin):
+class PurposeTable(Base):
     __tablename__ = "purposes"
     id = Column(Integer, nullable=False, primary_key=True)
     date = Column(DateTime, default=datetime.datetime.now(pytz.timezone('Asia/Tokyo')))
@@ -22,7 +21,7 @@ class PurposeTable(UserMixin):
         "UserTable", backref=backref("purposes", order_by=id))
 
 
-class ReserveTable(UserMixin):
+class ReserveTable(Base):
     __tablename__ = "reserves"
     id = Column(Integer, nullable=False, primary_key=True)
     date = Column(DateTime, default=datetime.datetime.now(pytz.timezone('Asia/Tokyo')))
@@ -32,7 +31,7 @@ class ReserveTable(UserMixin):
         "PurposeTable", backref=backref("reserves", order_by=id))
 
 
-class ChatTable(UserMixin):
+class ChatTable(Base):
     __tablename__ = "chats"
     reserve_id = Column(Integer, ForeignKey("ReserveTable.id"))
     date = Column(DateTime, default=datetime.datetime.now(pytz.timezone('Asia/Tokyo')))
@@ -44,5 +43,6 @@ class ChatTable(UserMixin):
     UserTable = relationship(
         "UserTable", backref=backref("chats", order_by=id))
 
-def create_database():
-    Base.metadata.create_all(bind=engine, checkfirst=False)
+if __name__ == "__main__":
+    Base.metadata.drop_all(bind=engine)
+    Base.metadata.create_all(bind=engine)
