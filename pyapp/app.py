@@ -9,6 +9,12 @@ from collections import defaultdict
 
 import flask
 import flask_login
+<<<<<<< HEAD
+=======
+from collections import defaultdict
+from flask import *
+import sqlite3
+>>>>>>> 27175da29a4ab2a4902ef476b6288327ff9a1994
 
 SECRET_KEY = "secret_key"
 
@@ -114,6 +120,52 @@ def show_dashboard():
     # dashboardの表示
     pass
 
+<<<<<<< HEAD
+=======
+#ここからあああああ、チャットオオオオ処理
+@app.route("/room.html")
+def room():
+    conn = sqlite3.connect('chat_test.db')
+    c = conn.cursor()
+    c.execute(
+        "select reserve.id, purpose.content from reserve inner join purpose on reserve.purpose_id = purpose.id")
+    room_list = c.fetchall()
+    conn.close()
+    return flask.render_template("room.html", tpl_room_list=room_list, abs_path=get_abs)
+
+
+@app.route("/chat.html/<int:reserveid>")
+def chat(reserveid):
+    conn = sqlite3.connect('chat_test.db')
+    c = conn.cursor()
+    c.execute(
+        "select chat.content from chat where chat.reserve_id = ?", (reserveid,)
+        )
+    chat_fetch = c.fetchall()
+    chat_list = []
+    for chat in chat_fetch:
+        chat_list.append(
+            {"content": chat[0]}
+        )
+    c.close()
+    return flask.render_template("chat.html", chat_list=chat_list, reserve_id=reserveid, abs_path=get_abs)
+
+@app.route("/chat.html/css/chat.css")
+def chcss():
+    return flask.render_template("css/chat.css", abs_path=get_abs)
+
+
+@app.route("/chat.html/<int:reserveid>", methods=["POST"])
+def chat_post(reserveid):
+    chat_message = request.form.get("input_message")
+    conn = sqlite3.connect('chat_test.db')
+    c = conn.cursor()
+    c.execute("insert into chat values(?,101,?,101)",
+    (reserveid, chat_message))
+    conn.commit()
+    c.close()
+    return redirect("/chat.html/{}".format(reserveid))
+>>>>>>> 27175da29a4ab2a4902ef476b6288327ff9a1994
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8008, debug=True)
