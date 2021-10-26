@@ -87,18 +87,6 @@ def show_dashboard():
     pass
 
 #ここからあああああ、チャットオオオオ処理
-# ユーザーを全て表示
-@app.route("/userlist")
-def userlist():
-    conn = sqlite3.connect('chattest.db')
-    c = conn.cursor()
-    c.execute("select id, name from user")
-    user_info = c.fetchall()
-    conn.close()
-    return flask.render_template("userlist.html", tpl_user_info=user_info, abs_path=get_abs)
-
-
-#sakorisi
 @app.route("/room.html")
 def room():
     conn = sqlite3.connect('chat_test.db')
