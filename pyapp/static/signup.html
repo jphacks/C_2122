@@ -14,7 +14,12 @@
         {{ abs_path("partials/navbar.html") | safe }}
 
         <div class="wrapper">
-            <h2 class="page-title">Sign in</h2>
+            <h2 class="page-title">Sign Up</h2>
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <div>{{ messages[0] }}</div>
+            {% endif %}
+            {% endwith %}
             <form action="#">
                 <div>
                     <label for="name">ユーザーネーム</label>
@@ -29,3 +34,16 @@
         </div>
     </body>
 </html>
+
+
+    <!--
+    bodyのどこかにお願いします！
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %} -->
