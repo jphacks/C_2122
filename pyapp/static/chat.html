@@ -18,7 +18,8 @@
                     <p></p>
                 </div>
                 <div id="messages">
-                    {% for chat in chat_list%}
+                    {% for chat in chat_list %}
+                    {% if user_id == chat["user_id"] %}
                     <div class="message right">
                         <div class="message_box">
                             <div class="message_content">
@@ -27,6 +28,16 @@
                         </div>
                     </div>
                     <div class="clear"></div>
+                    {% else %}
+                    <div class="message left">
+                        <div class="message_box">
+                            <div class="message_content">
+                                <div class="message_text">{{chat["content"]}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                    {% endif %}
                     {% endfor %}
                 </div>
 

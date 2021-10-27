@@ -1,3 +1,4 @@
+import datetime
 import sqlite3
 import flask
 import flask_login
@@ -128,7 +129,7 @@ def room():
     c = conn.cursor()
     user_id = flask_login.current_user.get_id() # ログインしているユーザのidを取得
     c.execute(
-        "select reserve.id, purpose.content from reserve inner join purpose on reserve.purpose_id = purpose.id where purpose.user_id = {}".format(user_id))
+        "select reserve.id, purpose.content from reserve inner join purpose on (reserve.purpose_id1 = purpose.id) or (reserve.purpose_id2 = purpose.id) where purpose.user_id = {}".format(user_id))
     room_list = c.fetchall()
     conn.close()
     return flask.render_template("room.html", tpl_room_list=room_list, abs_path=get_abs)
@@ -136,36 +137,35 @@ def room():
 
 @app.route("/chat.html/<int:reserveid>")
 def chat(reserveid):
+    user_id = flask_login.current_user.get_id()
     conn = sqlite3.connect('chat_test.db')
     c = conn.cursor()
-    c.execute(
-        "select chat.content from chat where chat.reserve_id = ?", (reserveid,)
-        )
+    c.execute("select reserve_id, date, content, user_id_sender from chat where reserve_id = {}".format(reserveid))
     chat_fetch = c.fetchall()
     chat_list = []
     for chat in chat_fetch:
         chat_list.append(
-            {"content": chat[0]}
+            {"reserve_id": chat[0], "date": chat[1], "content": chat[2], "user_id": chat[3]}
         )
     c.close()
-    return flask.render_template("chat.html", chat_list=chat_list, reserve_id=reserveid, abs_path=get_abs)
-
-@app.route("/chat.html/css/chat.css")
-def chcss():
-    return flask.render_template("css/chat.css", abs_path=get_abs)
+    return flask.render_template("chat.html", chat_list=chat_list, reserve_id=reserveid, user_id=user_id, abs_path=get_abs)
 
 
 @app.route("/chat.html/<int:reserveid>", methods=["POST"])
 def chat_post(reserveid):
+    user_id = flask_login.current_user.get_id()
     chat_message = flask.request.form.get("input_message")
     conn = sqlite3.connect('chat_test.db')
     c = conn.cursor()
-    c.execute("insert into chat values(?,101,?,101)",
-    (reserveid, chat_message))
+    c.execute("insert into chat values(?,?,?,?)",(reserveid, datetime.datetime.now(), chat_message, user_id))
     conn.commit()
     c.close()
     return flask.redirect("/chat.html/{}".format(reserveid))
 
+
+@app.route("/chat.html/css/chat.css")
+def chcss():
+    return flask.render_template("css/chat.css", abs_path=get_abs)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8008, debug=True)
