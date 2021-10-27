@@ -66,7 +66,8 @@ def login():
         else:
             print("login fail : Name or password does not match")
             print(user)
-            return flask.abort(401)
+            flask.flash("ユーザー名またはパスワードが間違っています", "sign in fail")
+            return flask.redirect("login.html")
     return flask.render_template("login.html", abs_path=get_abs)
 
 
@@ -77,6 +78,12 @@ def sign_up():
         # ユーザーチェック
         conn = sqlite3.connect('chat_test.db')
         c = conn.cursor()
+        if len(flask.request.form["name"]) < 2:
+            flask.flash("ユーザー名が短すぎます", "name is too short.")
+            return flask.redirect("/signup.html")
+        if len(flask.request.form["password"]) < 2:
+            flask.flash("パスワードが短すぎます", "password is too short.")
+            return flask.redirect("/signup.html")
         try:
             c.execute(
                 "select * from user where username = '{}' ".format(flask.request.form["name"]))
