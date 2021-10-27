@@ -18,12 +18,12 @@ app.config["SECRET_KEY"] = SECRET_KEY
 login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
 
+# ログイン用のクラス
 class User(flask_login.UserMixin):
     def __init__(self, user_id):
         self.id = user_id
     def get_id(self):
         return self.id
-
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -66,9 +66,11 @@ def login():
         if user != []:
             conn.close()
             flask_login.login_user(User(user[0][0]))
+            print("login success")
             return flask.redirect("/")
         else:
-            print(c.fetchall())
+            print("login fail : Name or password does not match")
+            print(user)
             return flask.abort(401)
     return flask.render_template("login.html", abs_path=get_abs)
 

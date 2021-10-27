@@ -25,23 +25,12 @@
                     <input type="text" id="password" name="password">
                 </div>
                 <input type="submit" class="button" value="ログイン" formmethod="post">
-            </form>
-            {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            <ul>
-                {% for message in messages %}
-                <li>{{ message }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-            {% endwith %}
         </div>
     </body>
 </html>
 
 
-    <!-- 
-    bodyのどこかにお願いします！
+    <!-- Pythonを表示させる
     {% with messages = get_flashed_messages() %}
         {% if messages %}
             <ul>
