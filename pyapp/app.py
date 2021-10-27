@@ -1,13 +1,6 @@
 import sqlite3
-from collections import defaultdict
-
 import flask
 import flask_login
-from sqlalchemy import Column, Integer, String, create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-
-import models.database as modeldb
 
 SECRET_KEY = "secret_key"
 
@@ -66,11 +59,43 @@ def login():
         if user != []:
             conn.close()
             flask_login.login_user(User(user[0][0]))
+            print("login success")
             return flask.redirect("/")
         else:
             print(c.fetchall())
             return flask.abort(401)
     return flask.render_template("login.html", abs_path=get_abs)
+
+
+@app.route("/signup.html", methods=["POST", "GET"])
+def sign_up():
+    # loginページの処理
+    if(flask.request.method == "POST"):
+        # ユーザーチェック
+        conn = sqlite3.connect('chat_test.db')
+        c = conn.cursor()
+        try:
+            c.execute(
+                "select * from user where username = '{}' ".format(flask.request.form["name"]))
+            flask.flash("その名前はすでに使用されています", "sign up fail")
+            user = c.fetchall()
+            if user == []:
+                raise "NoData"
+            return flask.redirect("/signup.html")
+        except:
+            c.execute(
+                "insert into user(username, password) values('{}', '{}')".format(flask.request.form["name"], flask.request.form["password"])
+            )
+            print("Sign up success")
+            c.execute(
+                "select * from user where username = '{}' ".format(flask.request.form["name"]))
+            user = c.fetchall()
+            print(user)
+            conn.commit()
+            conn.close()
+            flask_login.login_user(User(user[0][0]))
+            return flask.redirect("/")
+    return flask.render_template("signup.html", abs_path=get_abs)
 
 
 @app.route("/logout", methods=["GET"])
@@ -129,6 +154,7 @@ def chat_post(reserveid):
     conn.commit()
     c.close()
     return flask.redirect("/chat.html/{}".format(reserveid))
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8008, debug=True)
