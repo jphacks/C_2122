@@ -30,10 +30,12 @@
                     {% endfor %}
                 </div>
 
+                <div id="send">
                 <form action="/chat.html/{{reserve_id}}" method="POST">
                     <input type="text" name="input_message" placeholder="送信">
                     <input type="submit" value="送信">
                 </form>
+                </div>
             </div>
         </div>
     </div>
