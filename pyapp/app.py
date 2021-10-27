@@ -10,6 +10,7 @@ app = flask.Flask(
 app.config["SECRET_KEY"] = SECRET_KEY
 login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
+user_id = 0
 
 # ログイン用のクラス
 class User(flask_login.UserMixin):
@@ -58,7 +59,8 @@ def login():
         user = c.fetchall()
         if user != []:
             conn.close()
-            flask_login.login_user(User(user[0][0]))
+            user_id = int(user[0][0])
+            flask_login.login_user(User(int(user[0][0])))
             print("login success")
             return flask.redirect("/")
         else:
@@ -78,10 +80,10 @@ def sign_up():
         try:
             c.execute(
                 "select * from user where username = '{}' ".format(flask.request.form["name"]))
-            flask.flash("その名前はすでに使用されています", "sign up fail")
             user = c.fetchall()
             if user == []:
                 raise "NoData"
+            flask.flash("その名前はすでに使用されています", "sign up fail")
             return flask.redirect("/signup.html")
         except:
             c.execute(
@@ -94,7 +96,7 @@ def sign_up():
             print(user)
             conn.commit()
             conn.close()
-            flask_login.login_user(User(user[0][0]))
+            flask_login.login_user(User(int(user[0][0])))
             return flask.redirect("/")
     return flask.render_template("signup.html", abs_path=get_abs)
 
@@ -117,8 +119,9 @@ def show_dashboard():
 def room():
     conn = sqlite3.connect('chat_test.db')
     c = conn.cursor()
+    user_id = flask_login.current_user.get_id() # ログインしているユーザのidを取得
     c.execute(
-        "select reserve.id, purpose.content from reserve inner join purpose on reserve.purpose_id = purpose.id")
+        "select reserve.id, purpose.content from reserve inner join purpose on reserve.purpose_id = purpose.id where purpose.user_id = {}".format(user_id))
     room_list = c.fetchall()
     conn.close()
     return flask.render_template("room.html", tpl_room_list=room_list, abs_path=get_abs)
