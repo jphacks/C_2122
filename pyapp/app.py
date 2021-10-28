@@ -180,7 +180,7 @@ def chcss():
 #予約処理
 
 
-@app.route("/reservation.html")
+@app.route("/reservation.html", methods=["POST", "GET"])
 @flask_login.login_required
 def reserve():
     """
@@ -195,11 +195,17 @@ def reserve():
         conn = sqlite3.connect('chat_test.db')
         c = conn.cursor()
         user_id = flask_login.current_user.get_id()
-        c.execute("insert into purpose(date, user_id, content values({}, {}, {})".format(
-            flask.request.form["date"] + flask.request.form["time"], user_id, flask.request.form["purpose"]))
+        print(flask.request.form)
+        t = flask.request.form["time"].replace(":", "-")
+        c.execute("insert into purpose(date, user_id, content) values('{}', '{}', '{}')".format(
+            str(flask.request.form["date"]) + "-" + t, user_id, flask.request.form["purpose"]))
         conn.commit()
+        c.execute(
+            "select reserve.id, purpose.content from reserve inner join purpose on (reserve.purpose_id1 = purpose.id) or (reserve.purpose_id2 = purpose.id) where purpose.user_id = {}".format(user_id))
+        room_list = c.fetchall()
+        print(room_list)
         c.close()
-        flask.flash("パスワードが短すぎます", "password is too short.")
+        return flask.render_template("/reservation.html", abs_path=get_abs, messages=room_list)
     return flask.render_template("/reservation.html", abs_path=get_abs)
 
 if __name__ == "__main__":
