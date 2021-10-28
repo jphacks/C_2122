@@ -2,23 +2,27 @@ import datetime
 import sqlite3
 import flask
 import flask_login
-from flask import render_template
+
 SECRET_KEY = "secret_key"
 
 app = flask.Flask(
-        __name__,
-        template_folder="static")
+    __name__,
+    template_folder="static")
 app.config["SECRET_KEY"] = SECRET_KEY
 login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
 user_id = 0
 
 # ログイン用のクラス
+
+
 class User(flask_login.UserMixin):
     def __init__(self, user_id):
         self.id = user_id
+
     def get_id(self):
         return self.id
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -95,7 +99,8 @@ def sign_up():
             return flask.redirect("/signup.html")
         except:
             c.execute(
-                "insert into user(username, password) values('{}', '{}')".format(flask.request.form["name"], flask.request.form["password"])
+                "insert into user(username, password) values('{}', '{}')".format(
+                    flask.request.form["name"], flask.request.form["password"])
             )
             print("Sign up success")
             c.execute(
@@ -123,11 +128,13 @@ def show_dashboard():
     pass
 
 #ここからあああああ、チャットオオオオ処理
+
+
 @app.route("/room.html")
 def room():
     conn = sqlite3.connect('chat_test.db')
     c = conn.cursor()
-    user_id = flask_login.current_user.get_id() # ログインしているユーザのidを取得
+    user_id = flask_login.current_user.get_id()  # ログインしているユーザのidを取得
     c.execute(
         "select reserve.id, purpose.content from reserve inner join purpose on (reserve.purpose_id1 = purpose.id) or (reserve.purpose_id2 = purpose.id) where purpose.user_id = {}".format(user_id))
     room_list = c.fetchall()
@@ -140,12 +147,14 @@ def chat(reserveid):
     user_id = flask_login.current_user.get_id()
     conn = sqlite3.connect('chat_test.db')
     c = conn.cursor()
-    c.execute("select reserve_id, date, content, user_id_sender from chat where reserve_id = {}".format(reserveid))
+    c.execute(
+        "select reserve_id, date, content, user_id_sender from chat where reserve_id = {}".format(reserveid))
     chat_fetch = c.fetchall()
     chat_list = []
     for chat in chat_fetch:
         chat_list.append(
-            {"reserve_id": chat[0], "date": chat[1], "content": chat[2], "user_id": chat[3]}
+            {"reserve_id": chat[0], "date": chat[1],
+                "content": chat[2], "user_id": chat[3]}
         )
     c.close()
     return flask.render_template("chat.html", chat_list=chat_list, reserve_id=reserveid, user_id=user_id, abs_path=get_abs)
@@ -157,27 +166,41 @@ def chat_post(reserveid):
     chat_message = flask.request.form.get("input_message")
     conn = sqlite3.connect('chat_test.db')
     c = conn.cursor()
-    c.execute("insert into chat values(?,?,?,?)",(reserveid, datetime.datetime.now(), chat_message, user_id))
+    c.execute("insert into chat values(?,?,?,?)", (reserveid,
+            datetime.datetime.now(), chat_message, user_id))
     conn.commit()
     c.close()
     return flask.redirect("/chat.html/{}".format(reserveid))
-
-#予約処理
-@app.route("/reservation.html")
-def reserve():
-    
-    conn = sqlite3.connect('reserve_test.db')
-    c = conn.cursor()
-    c.execute('CREATE TABLE reserve (id integer, date text, time text, purpose text)')
-    conn.commit()
-    conn.close()
-    return flask.render_template('<reserve {}>', abs_path=get_abs)
 
 
 @app.route("/chat.html/css/chat.css")
 def chcss():
     return flask.render_template("css/chat.css", abs_path=get_abs)
 
+#予約処理
+
+
+@app.route("/reservation.html")
+@flask_login.login_required
+def reserve():
+    """
+    conn = sqlite3.connect('reserve_test.db')
+    c = conn.cursor()
+    c.execute('CREATE TABLE reserve (id integer, date text, time text, purpose text)')
+    conn.commit()
+    conn.close()
+    return flask.render_template('<reserve {}>', abs_path=get_abs)"""
+    if(flask.request.method == "POST"):
+        # ユーザーチェック
+        conn = sqlite3.connect('chat_test.db')
+        c = conn.cursor()
+        user_id = flask_login.current_user.get_id()
+        c.execute("insert into purpose(date, user_id, content values({}, {}, {})".format(
+            flask.request.form["date"] + flask.request.form["time"], user_id, flask.request.form["purpose"]))
+        conn.commit()
+        c.close()
+        flask.flash("パスワードが短すぎます", "password is too short.")
+    return flask.render_template("/reservation.html", abs_path=get_abs)
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8008, debug=True)
-

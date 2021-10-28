@@ -54,17 +54,14 @@
                             </label>
                             <br>目的</br>
                             <div class="text">
-                                <textarea name="purpose" class="validate[required,length[6,300]] feedback-input"
-                                    id="comment" placeholder="目的" rows="3"></textarea>
+                                <textarea name="purpose" id="purpose" placeholder="目的" rows="3"></textarea>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="submit" value="Room作成" formmethod="post">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
                             </div>
                         </form>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
-                    <form action="/CCCC" method="POST">
-                        <input type="submit" value="Room作成">
-                    </form>
                 </div>
             </div>
         </div>
