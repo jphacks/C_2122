@@ -206,7 +206,7 @@ def reserve():
         print(room_list)
         c.close()
         return flask.render_template("/reservation.html", abs_path=get_abs, messages=room_list)
-    return flask.render_template("/reservation.html", abs_path=get_abs)
+    return flask.render_template("/reservation.html", abs_path=get_abs, messages=room_list)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8008, debug=True)
