@@ -155,6 +155,16 @@ def chat_post(reserveid):
     c.close()
     return flask.redirect("/chat.html/{}".format(reserveid))
 
+#予約処理
+@app.route("/reservation.html")
+def reserve():
+    conn = sqlite3.connect('reserve_test.db')
+    c = conn.cursor()
+    c.execute(
+        "reserve.id, room.string, purpose.string, date.integer, time.integer")
+    conn.commit()
+    conn.close()
+    return flask.render_template("reservation.html", abs_path=get_abs)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8008, debug=True)

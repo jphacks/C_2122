@@ -1,0 +1,90 @@
+<h1>reservation</h1>
+
+<head>
+    <title>予約</title>
+    <!-- 必要なメタタグ -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<section id="box1" class="box" data-section-name="Top">
+    <div class="black">
+        <h1>使い方</h1>
+        <ol style="line-height: 40px;">
+            <li>日程を選択しよう</li>
+            <li>目的を書こう</li>
+            <li>確定ボタンを押してRoomを作成しよう</li>
+        </ol>
+    </div>
+</section>
+<body>
+<!--こっから選択機能-->
+
+    <!-- 切り替えボタンの設定 -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Modal">
+        Roomを作成する
+    </button>
+    <!-- モーダルの設定 -->
+    <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="Modal" aria-hidden="true">
+        <!--以下modal-dialogのCSSの部分で modal-lgやmodal-smを追加するとモーダルのサイズを変更することができる-->
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="Modal">Roomを作成する</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="閉じる">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div id="form-main">
+                    <div id="form-div" class="grid_reservation">
+                        <form class="form" id="form1">
+                            <br>Room名</br>
+                            <div class="name">
+                                <input name="name" type="text"
+                                    class="validate[required,custom[onlyLetter],length[0,100]] feedback-input"
+                                    placeholder="Room名" id="name" />
+                            </div>
+                            <br>日付と時刻</br>
+                            <label>
+                                <input type="date" name="date" id="date">
+                            </label>
+                            <label>
+                                <input type="time" name="time" id="time">
+                            </label>
+                            <br>目的</br>
+                            <div class="text">
+                                <textarea name="text" class="validate[required,length[6,300]] feedback-input"
+                                    id="comment" placeholder="目的" rows="3"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
+                    <form action="/CCCC" method="POST">
+                        <input type="submit" value="Room作成">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <!--こっから表示機能-->
+{% for task in tasks %}
+        <tr>
+        <td
+            class="card"
+            id="task_{{task.id}}"
+            task_id="{{task.id}}">{{ task.text }}
+        </td>
+        </tr>
+{% endfor %}
+    </table>
+    </form>
+</main>
+
+</body>
