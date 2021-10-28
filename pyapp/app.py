@@ -161,10 +161,10 @@ def reserve():
     
     conn = sqlite3.connect('reserve_test.db')
     c = conn.cursor()
-    c.execute('CREATE TABLE reserve  (id int, purpose(1024), created datetime)')
+    c.execute('CREATE TABLE reserve (id integer, date, time, purpose text,)')
     conn.commit()
     conn.close()
-    return flask.render_template("reservation.html"'<reserve {}>', abs_path=get_abs)
+    return flask.render_template('<reserve {}>', abs_path=get_abs)
 
 
 if __name__ == "__main__":
