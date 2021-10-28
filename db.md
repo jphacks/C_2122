@@ -13,8 +13,8 @@
 # Reserve（予約）
 - id[int]
 - date[date]
-- purpose_id[int] # purposeテーブルに依存
-- purpose_id[int] # purposeテーブルに依存
+- purpose_id1[int] # purposeテーブルに依存
+- purpose_id2[int] # purposeテーブルに依存
 
 # Chat（チャット）
 - reserve_id[int] # reserveテーブルに依存

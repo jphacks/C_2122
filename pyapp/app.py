@@ -1,3 +1,4 @@
+import datetime
 import sqlite3
 import flask
 import flask_login
@@ -10,13 +11,14 @@ app = flask.Flask(
 app.config["SECRET_KEY"] = SECRET_KEY
 login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
+user_id = 0
 
+# ログイン用のクラス
 class User(flask_login.UserMixin):
     def __init__(self, user_id):
         self.id = user_id
     def get_id(self):
         return self.id
-
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -58,12 +60,15 @@ def login():
         user = c.fetchall()
         if user != []:
             conn.close()
-            flask_login.login_user(User(user[0][0]))
+            user_id = int(user[0][0])
+            flask_login.login_user(User(int(user[0][0])))
             print("login success")
             return flask.redirect("/")
         else:
-            print(c.fetchall())
-            return flask.abort(401)
+            print("login fail : Name or password does not match")
+            print(user)
+            flask.flash("ユーザー名またはパスワードが間違っています", "sign in fail")
+            return flask.redirect("login.html")
     return flask.render_template("login.html", abs_path=get_abs)
 
 
@@ -74,13 +79,19 @@ def sign_up():
         # ユーザーチェック
         conn = sqlite3.connect('chat_test.db')
         c = conn.cursor()
+        if len(flask.request.form["name"]) < 2:
+            flask.flash("ユーザー名が短すぎます", "name is too short.")
+            return flask.redirect("/signup.html")
+        if len(flask.request.form["password"]) < 2:
+            flask.flash("パスワードが短すぎます", "password is too short.")
+            return flask.redirect("/signup.html")
         try:
             c.execute(
                 "select * from user where username = '{}' ".format(flask.request.form["name"]))
-            flask.flash("その名前はすでに使用されています", "sign up fail")
             user = c.fetchall()
             if user == []:
                 raise "NoData"
+            flask.flash("その名前はすでに使用されています", "sign up fail")
             return flask.redirect("/signup.html")
         except:
             c.execute(
@@ -93,7 +104,7 @@ def sign_up():
             print(user)
             conn.commit()
             conn.close()
-            flask_login.login_user(User(user[0][0]))
+            flask_login.login_user(User(int(user[0][0])))
             return flask.redirect("/")
     return flask.render_template("signup.html", abs_path=get_abs)
 
@@ -116,8 +127,9 @@ def show_dashboard():
 def room():
     conn = sqlite3.connect('chat_test.db')
     c = conn.cursor()
+    user_id = flask_login.current_user.get_id() # ログインしているユーザのidを取得
     c.execute(
-        "select reserve.id, purpose.content from reserve inner join purpose on reserve.purpose_id = purpose.id")
+        "select reserve.id, purpose.content from reserve inner join purpose on (reserve.purpose_id1 = purpose.id) or (reserve.purpose_id2 = purpose.id) where purpose.user_id = {}".format(user_id))
     room_list = c.fetchall()
     conn.close()
     return flask.render_template("room.html", tpl_room_list=room_list, abs_path=get_abs)
@@ -125,32 +137,27 @@ def room():
 
 @app.route("/chat.html/<int:reserveid>")
 def chat(reserveid):
+    user_id = flask_login.current_user.get_id()
     conn = sqlite3.connect('chat_test.db')
     c = conn.cursor()
-    c.execute(
-        "select chat.content from chat where chat.reserve_id = ?", (reserveid,)
-        )
+    c.execute("select reserve_id, date, content, user_id_sender from chat where reserve_id = {}".format(reserveid))
     chat_fetch = c.fetchall()
     chat_list = []
     for chat in chat_fetch:
         chat_list.append(
-            {"content": chat[0]}
+            {"reserve_id": chat[0], "date": chat[1], "content": chat[2], "user_id": chat[3]}
         )
     c.close()
-    return flask.render_template("chat.html", chat_list=chat_list, reserve_id=reserveid, abs_path=get_abs)
-
-@app.route("/chat.html/css/chat.css")
-def chcss():
-    return flask.render_template("css/chat.css", abs_path=get_abs)
+    return flask.render_template("chat.html", chat_list=chat_list, reserve_id=reserveid, user_id=user_id, abs_path=get_abs)
 
 
 @app.route("/chat.html/<int:reserveid>", methods=["POST"])
 def chat_post(reserveid):
+    user_id = flask_login.current_user.get_id()
     chat_message = flask.request.form.get("input_message")
     conn = sqlite3.connect('chat_test.db')
     c = conn.cursor()
-    c.execute("insert into chat values(?,101,?,101)",
-    (reserveid, chat_message))
+    c.execute("insert into chat values(?,?,?,?)",(reserveid, datetime.datetime.now(), chat_message, user_id))
     conn.commit()
     c.close()
     return flask.redirect("/chat.html/{}".format(reserveid))
@@ -166,6 +173,10 @@ def reserve():
     conn.close()
     return flask.render_template('<reserve {}>', abs_path=get_abs)
 
+
+@app.route("/chat.html/css/chat.css")
+def chcss():
+    return flask.render_template("css/chat.css", abs_path=get_abs)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8008, debug=True)
