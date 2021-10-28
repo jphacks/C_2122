@@ -67,7 +67,7 @@ def login():
             user_id = int(user[0][0])
             flask_login.login_user(User(int(user[0][0])))
             print("login success")
-            return flask.redirect("/")
+            return flask.redirect("room.html")
         else:
             print("login fail : Name or password does not match")
             print(user)
@@ -110,7 +110,7 @@ def sign_up():
             conn.commit()
             conn.close()
             flask_login.login_user(User(int(user[0][0])))
-            return flask.redirect("/")
+            return flask.redirect("room.html")
     return flask.render_template("signup.html", abs_path=get_abs)
 
 
