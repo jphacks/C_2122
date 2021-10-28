@@ -74,17 +74,16 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
     <!--こっから表示機能-->
-{% for task in tasks %}
+{% for reserve in reserves%}
+    <tbody>
         <tr>
-        <td
-            class="card"
-            id="task_{{task.id}}"
-            task_id="{{task.id}}">{{ task.text }}
-        </td>
+        <td> {{ reseve.id }} </td>
+        <td> {{ reseve.purpose }} </td>
+        <td> {{ reseve.date }} </td>
+        <td> {{ reseve.time }} </td>
         </tr>
+    </tbody>
 {% endfor %}
-    </table>
-    </form>
 </main>
 
 </body>

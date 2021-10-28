@@ -1,7 +1,7 @@
 import sqlite3
 import flask
 import flask_login
-
+from flask import render_template
 SECRET_KEY = "secret_key"
 
 app = flask.Flask(
@@ -158,13 +158,15 @@ def chat_post(reserveid):
 #予約処理
 @app.route("/reservation.html")
 def reserve():
+    
     conn = sqlite3.connect('reserve_test.db')
     c = conn.cursor()
-    c.execute(
-        "reserve.id, room.string, purpose.string, date.integer, time.integer")
+    c.execute('CREATE TABLE reserve  (id int, purpose(1024), created datetime)')
     conn.commit()
     conn.close()
-    return flask.render_template("reservation.html", abs_path=get_abs)
+    return flask.render_template("reservation.html"'<reserve {}>', abs_path=get_abs)
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8008, debug=True)
+
