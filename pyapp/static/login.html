@@ -1,20 +1,16 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html> -->
 <html lang="ja">
     <head>
-        <meta charset="utf-8">
-        <title>スケマ！ ログイン</title>
-        <meta name="description" content="似たスケジュールを持つ人同士をマッチする出会い系スケジュールアプリ">
-
         <!-- Shared Head -->
         {{ abs_path("partials/headend.html") | safe }}
 
     </head>
     <body>
         <!-- Navigation Bar -->
-        {{ abs_path("partials/navbar.html") | safe }}
+        <!-- {{ abs_path("partials/navbar.html") | safe }} -->
 
         <div class="wrapper">
-            <h2 class="page-title">Sign in</h2>
+            <h2 class="page-title">ログイン</h2>
             {% with messages = get_flashed_messages() %}
             {% if messages %}
             <div>{{ messages[0] }}</div>

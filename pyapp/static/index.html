@@ -1,24 +1,25 @@
 <!-- <!DOCTYPE html> -->
 <html lang="ja">
-    <head>
-        <meta charset="utf-8">
-        <title>スケマ！ - Keep Time to Meet -</title>
-        <meta name="description" content="似たスケジュールを持つ人同士をマッチする出会い系スケジュールアプリ">
 
-        <!-- Shared Head -->
-        {{ abs_path("partials/headend.html") | safe }}
+<head>
+    <!-- Shared Head -->
+    {{ abs_path("partials/headend.html") | safe }}
 
-    </head>
-    <body>
-        <!-- Navigation Bar -->
-        {{ abs_path("partials/navbar.html") | safe }}
+</head>
 
+<body>
+    <!-- Navigation Bar -->
+    <!-- {{ abs_path("partials/navbar.html") | safe }} -->
+
+    <div id="home" class="big-bg">
+        <p class="visibility-hidden">top</p>
         <div class="home-content wrapper">
             <h2 class="page-title">スケマ！</h2>
             <p>似たスケジュールを持つ人同士をマッチする出会い系スケジュールアプリ</p>
+            <a class="button" href="signup.html">登録</a>
             <a class="button" href="login.html">ログイン</a>
-            <a class="button" href="room.html">ルーム</a>
-            <a class="button" href="signup.html">Sign up</a>
         </div>
-    </body>
+    </div>
+</body>
+
 </html>

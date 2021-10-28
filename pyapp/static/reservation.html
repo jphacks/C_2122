@@ -1,13 +1,11 @@
-<h1>reservation</h1>
+<!-- <h1>reservation</h1> -->
 
+<html lang="ja">
 <head>
-    <title>予約</title>
-    <!-- 必要なメタタグ -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    {{ abs_path("partials/headend.html") | safe }}
 </head>
+<body>
+{{ abs_path("partials/navbar.html") | safe }}
 <section id="box1" class="box" data-section-name="Top">
     <div class="black">
         <h1>使い方</h1>
@@ -18,7 +16,6 @@
         </ol>
     </div>
 </section>
-<body>
 <!--こっから選択機能-->
 
     <!-- 切り替えボタンの設定 -->
@@ -75,3 +72,4 @@
 </main>
 
 </body>
+</html>

@@ -2,15 +2,11 @@
 <html lang="ja">
 
 <head>
-    <meta charset="UTF-8">
-    <!-- スマホの表示用 -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>チャットオオオオオ</title>
-
-    <link type="text/css" rel="stylesheet" href="css/chat.css">
+    {{ abs_path("partials/headend.html") | safe }}
 </head>
 
 <body>
+    {{ abs_path("partials/navbar.html") | safe }}
     <div class="fullheight">
         <div id="your_container">
             <div id="messages_container">

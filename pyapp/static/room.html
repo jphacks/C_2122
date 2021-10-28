@@ -1,12 +1,13 @@
 <!-- <!DOCTYPE html> -->
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <title>ルーム</title>
     {{ abs_path("partials/headend.html") | safe }}
 </head>
 <body>
     {{ abs_path("partials/navbar.html") | safe }}
+    <a class="button" href="reservation.html">スケジュール</a>
+
+
     {% for room in tpl_room_list %}
     <div class="roomCard">
         <p class="userName">{{room[1]}}</p>

@@ -173,10 +173,6 @@ def chat_post(reserveid):
     return flask.redirect("/chat.html/{}".format(reserveid))
 
 
-@app.route("/chat.html/css/chat.css")
-def chcss():
-    return flask.render_template("css/chat.css", abs_path=get_abs)
-
 #予約処理
 
 
@@ -206,7 +202,7 @@ def reserve():
         print(room_list)
         c.close()
         return flask.render_template("/reservation.html", abs_path=get_abs, messages=room_list)
-    return flask.render_template("/reservation.html", abs_path=get_abs, messages=room_list)
+    return flask.render_template("/reservation.html", abs_path=get_abs)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8008, debug=True)
