@@ -5,15 +5,34 @@
 </head>
 <body>
     {{ abs_path("partials/navbar.html") | safe }}
+
     <a class="button" href="reservation.html">スケジュール</a>
+    <a class="button" href="match.html">マッチング</a>
 
-
-    {% for room in tpl_room_list %}
+    <p>チャットルーム</p>
+    {% for room in open_list %}
     <div class="roomCard">
-        <p class="userName">{{room[1]}}</p>
-        <form action="/chat.html/{{room[0]}}">
+        <p class="datetime">{{room[0]}}</p>
+        <p class="contentName">{{room[1]}}</p>
+        <form action="/chat.html/{{room[2]}}">
             <input type="submit" value="チャットへ">
         </form>
+    </div>
+    {% endfor %}
+
+    <p>承認待ちルーム</p>
+    {% for room in wait_list %}
+    <div class="roomCard">
+        <p class="datetime">{{room[1]}}</p>
+        <p class="contentName">{{room[3]}}</p>
+    </div>
+    {% endfor %}
+
+    <p>予定一覧</p>
+    {% for room in my_list %}
+    <div class="roomCard">
+        <p class="datetime">{{room[1]}}</p>
+        <p class="contentName">{{room[3]}}</p>
     </div>
     {% endfor %}
 </body>

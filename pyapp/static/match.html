@@ -1,0 +1,37 @@
+<!-- <!DOCTYPE html> -->
+<html lang="ja">
+<head>
+    {{ abs_path("partials/headend.html") | safe }}
+</head>
+<body>
+    {{ abs_path("partials/navbar.html") | safe }}
+
+
+    <h3>自分へのリクエスト</h3>
+    {% for card in to_me %}
+    <form>
+    <div class="cardMe">
+        <p class="datetime">{{card[1]}}</p>
+        <p class="userName">{{card[4]}}</p>
+        <input type="hidden" id="reserve" name="reserve" value={{card[0]}}>
+        <input type="hidden" id="my_purpose" name="my_purpose" value={{card[3]}}>
+        <input type="hidden" id="your_purpose" name="your_purpose" value={{card[2]}}>
+        <input type="submit" class="button" value="承認" formmethod="post">
+    </div>
+    </form>
+    {% endfor %}
+
+    <h3>マッチング候補</h3>
+    {% for card in candidate %}
+    <form>
+    <div class="cardCandidate">
+        <p class="datetime">{{card[1]}}</p>
+        <p class="userName">{{card[5]}}</p>
+        <input type="hidden" id="my_purpose" name="my_purpose" value={{card[6]}}>
+        <input type="hidden" id="your_purpose" name="your_purpose" value={{card[0]}}>
+        <input type="hidden" id="date" name="date" value={{card[1]}}>
+        <input type="submit" class="button" value="リクエスト" formmethod="post">
+    </div>
+    </form>
+    {% endfor %}
+</body>

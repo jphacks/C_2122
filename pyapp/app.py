@@ -127,7 +127,8 @@ def show_dashboard():
     # dashboardの表示
     pass
 
-#ここからあああああ、チャットオオオオ処理
+
+#チャット処理
 
 
 @app.route("/room.html")
@@ -135,11 +136,35 @@ def room():
     conn = sqlite3.connect('chat_test.db')
     c = conn.cursor()
     user_id = flask_login.current_user.get_id()  # ログインしているユーザのidを取得
+
     c.execute(
-        "select reserve.id, purpose.content from reserve inner join purpose on (reserve.purpose_id1 = purpose.id) or (reserve.purpose_id2 = purpose.id) where purpose.user_id = {}".format(user_id))
-    room_list = c.fetchall()
+        "select id, date, user_id, content, reserved_id from purpose where (reserved_id is null) and (purpose.user_id = {})".format(user_id)
+    )
+    purpose_list = c.fetchall() 
+    c.execute(
+        "select purpose_id1 from reserve"
+    )
+    reserve_list = c.fetchall()
+    my_list = []
+    wait_list = []
+    for p in purpose_list:
+        b = False
+        for r in reserve_list:
+            if p[0] == r[0]:
+                b = True
+                break
+        if b:
+            wait_list.append(p)
+        else:
+            my_list.append(p)
+
+    c.execute(
+        "select purpose.date, purpose.content, reserve.id from purpose inner join reserve on purpose.reserved_id = reserve.id where purpose.user_id = {}".format(user_id)
+    )
+    open_list = c.fetchall()
+
     conn.close()
-    return flask.render_template("room.html", tpl_room_list=room_list, abs_path=get_abs)
+    return flask.render_template("room.html", my_list=my_list, wait_list=wait_list, open_list=open_list, abs_path=get_abs)
 
 
 @app.route("/chat.html/<int:reserveid>")
@@ -156,7 +181,7 @@ def chat(reserveid):
             {"reserve_id": chat[0], "date": chat[1],
                 "content": chat[2], "user_id": chat[3]}
         )
-    c.close()
+    conn.close()
     return flask.render_template("chat.html", chat_list=chat_list, reserve_id=reserveid, user_id=user_id, abs_path=get_abs)
 
 
@@ -169,7 +194,7 @@ def chat_post(reserveid):
     c.execute("insert into chat values(?,?,?,?)", (reserveid,
             datetime.datetime.now(), chat_message, user_id))
     conn.commit()
-    c.close()
+    conn.close()
     return flask.redirect("/chat.html/{}".format(reserveid))
 
 
@@ -200,9 +225,84 @@ def reserve():
             "select reserve.id, purpose.content from reserve inner join purpose on (reserve.purpose_id1 = purpose.id) or (reserve.purpose_id2 = purpose.id) where purpose.user_id = {}".format(user_id))
         room_list = c.fetchall()
         print(room_list)
-        c.close()
+        conn.close()
         return flask.render_template("/reservation.html", abs_path=get_abs, messages=room_list)
     return flask.render_template("/reservation.html", abs_path=get_abs)
+
+
+#マッチング処理
+
+
+@app.route("/match.html")
+def match():
+    conn = sqlite3.connect('chat_test.db')
+    c = conn.cursor()
+    user_id = flask_login.current_user.get_id()  # ログインしているユーザのidを取得
+    c.execute(
+        "select id, date, purpose_id1, purpose_id2 from reserve where (purpose_id1 is not null) and (purpose_id2 is not null)"
+    )
+    room_list = c.fetchall()
+    c.execute(
+        "select purpose.id, purpose.date, purpose.user_id, purpose.content, purpose.reserved_id, user.username from purpose inner join user on purpose.id = user.id where reserved_id is null"
+    )
+    purpose_list = c.fetchall()
+    to_me = []
+    for r in room_list:
+        for p in purpose_list:
+            print(p[2], user_id)
+            if p[2] == user_id and r[3] == p[0]:
+                r = list(r)
+                to_me.append(r)
+    for i in range(len(to_me)):
+        for p in purpose_list:
+            if to_me[i][2] == p[0]:
+                to_me[i].append(p[5])
+                break
+
+    c.execute(
+        "select id, date, purpose_id1, purpose_id2 from reserve"
+    )
+    room_list = c.fetchall()
+    c.execute(
+        "select purpose.id, purpose.date, purpose.user_id, purpose.content, purpose.reserved_id, user.username from purpose inner join user on purpose.user_id = user.id where (reserved_id is null) and (user_id = {})".format(user_id)
+    )
+    my_list = c.fetchall()
+    c.execute(
+        "select purpose.id, purpose.date, purpose.user_id, purpose.content, purpose.reserved_id, user.username from purpose inner join user on purpose.user_id = user.id where (reserved_id is null) and (user_id != {})".format(user_id)
+    )
+    your_list = c.fetchall()
+    candidate = []
+    for my in my_list:
+        for your in your_list:
+            if my[1] == your[1]:
+                b = True
+                for r in room_list:
+                    if r[2] == my[0] or r[3] == my[0] or r[2] == your[0] or r[3] == your[0]:
+                        b = False
+                if b:
+                    your = list(your)
+                    your.append(my[0])
+                    candidate.append(your)
+
+    conn.close()
+    return flask.render_template("match.html", abs_path=get_abs, to_me=to_me, candidate=candidate)
+
+@app.route("/match.html", methods=["POST"])
+def match_post():
+    user_id = flask_login.current_user.get_id()  # ログインしているユーザのidを取得
+    conn = sqlite3.connect('chat_test.db')
+    c = conn.cursor()
+    print(flask.request.form)
+    if "reserve" in flask.request.form:
+        c.execute("update purpose set reserved_id='{}' where id={}".format(flask.request.form["reserve"], flask.request.form["my_purpose"]))
+        conn.commit()
+        c.execute("update purpose set reserved_id='{}' where id={}".format(flask.request.form["reserve"], flask.request.form["your_purpose"]))
+        conn.commit()
+    else:
+        c.execute("insert into reserve(date, purpose_id1, purpose_id2) values('{}','{}','{}')".format(flask.request.form["date"], flask.request.form["my_purpose"], flask.request.form["your_purpose"]))
+        conn.commit()
+    conn.close()
+    return flask.redirect("/match.html")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8008, debug=True)
