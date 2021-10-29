@@ -15,6 +15,8 @@ body a {
 }
 
 body .wrapper {
+  bottom:100px;
+  text-align: center;
   max-width: 1100px;
   margin: 0 auto;
   padding: 0 4%;
@@ -234,5 +236,10 @@ body #your_container #messages_container #send input[type="submit"]:hover {
 
 .fullheight {
   height: 100%;
+}
+
+/*中央揃え*/
+.inner{
+  text-align: center;
 }
 /*# sourceMappingURL=style.css.map */
