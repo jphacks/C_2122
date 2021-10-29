@@ -1,0 +1,77 @@
+<!-- <h1>reservation</h1> -->
+
+<html lang="ja">
+<head>
+    {{ abs_path("partials/headend.html") | safe }}
+</head>
+<body>
+{{ abs_path("partials/navbar.html") | safe }}
+<div id="red-yellow" class="big-bg">
+<section id="box1" class="box" data-section-name="Top">
+    <div class="inner">
+        <h1>使い方</h1>
+        <ol style="line-height: 40px;">
+            <li>日程を選択しよう</li>
+            <li>目的を書こう</li>
+            <li>確定ボタンを押してRoomを作成しよう</li>
+        </ol>
+    </div>
+</section>
+<!--こっから選択機能-->
+
+    <!-- 切り替えボタンの設定 -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Modal">
+        Roomを作成する
+    </button>
+    <!-- モーダルの設定 -->
+    <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="Modal" aria-hidden="true">
+        <!--以下modal-dialogのCSSの部分で modal-lgやmodal-smを追加するとモーダルのサイズを変更することができる-->
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="Modal">Roomを作成する</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="閉じる">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div id="form-main">
+                    <div id="form-div" class="grid_reservation">
+                        <form class="form" id="form1">
+                            <br>日付と時刻</br>
+                            <label>
+                                <input type="date" name="date" id="date">
+                            </label>
+                            <label>
+                                <input type="time" name="time" id="time">
+                            </label>
+                            <br>目的</br>
+                            <div class="text">
+                                <textarea name="purpose" id="purpose" placeholder="目的" rows="3"></textarea>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="submit" value="Room作成" formmethod="post">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <!--こっから表示機能-->
+{% if messages %}
+<ul>
+{% for message in messages %}
+<div><li>{{ message }}</li></div>
+{% endfor %}
+</ul>
+{% endif %}
+</main>
+
+</div>
+</body>
+</html>
