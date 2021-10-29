@@ -242,4 +242,25 @@ body #your_container #messages_container #send input[type="submit"]:hover {
 .inner{
   text-align: center;
 }
+.box3 {
+  /*box-shadow*/
+  box-shadow:0 0 5px #fff, 0 0 5px #ccc, 0 0 1px #aaa;
+  -webkit-box-shadow:0 0 5px #fff, 0 0 5px #ccc, 0 0 1px #aaa;
+  -moz-box-shadow:0 0 5px #fff, 0 0 5px #ccc, 0 0 1px #aaa;
+  /*ボックスのデザイン*/
+  padding:10px;
+  width: 600px;
+  border:1px solid #ccc;
+  margin: 10px auto;
+  }
+
+  /*ボタンのデザイン*/
+.example{
+    width: 100px;
+    padding: 8px;
+    box-sizing: border-box;
+    border: 1px solid #68779a;
+    background: #cbe8fa;
+    cursor: pointer;
+}
 /*# sourceMappingURL=style.css.map */
