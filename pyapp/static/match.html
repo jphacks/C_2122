@@ -7,10 +7,12 @@
     {{ abs_path("partials/navbar.html") | safe }}
 
 
+    <div id="red-yellow" class="big-bg">
     <div class = inner>
             <font size=6>自分へのリクエスト</font>
         </div>
     {% for card in to_me %}
+    <form>
     <div class = "box3">
         <div class="cardMe">
             <p class="datetime">日付 : {{card[1]}}</p>
@@ -23,12 +25,14 @@
             </div>
         </div>
     </div>
+    </form>
     {% endfor %}
 
     <div class = inner>
             <font size=6>マッチング候補</font>
         </div>
     {% for card in candidate %}
+    <form>
     <div class = "box3">
         <div class="cardCandidate">
             <p class="datetime">日付 : {{card[1]}}</p>
@@ -39,5 +43,7 @@
             <input type="submit" class="button2" value="リクエスト" formmethod="post">
         </div>
     </div>
+    </form>
     {% endfor %}
+    </div>
 </body>

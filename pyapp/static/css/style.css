@@ -47,6 +47,16 @@ body .big-bg {
   background-repeat: no-repeat;
 }
 
+body #red-yellow {
+  background-image: linear-gradient(#fabea7, #fffac2);
+  min-height: 100vh;
+}
+
+body #green-pink {
+  background-image: linear-gradient(#c9ffbf, #ffafbd);
+  min-height: 100vh;
+}
+
 body #home {
   background-image: url(/static/images/image.png);
   min-height: 100vh;
