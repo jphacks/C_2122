@@ -29,6 +29,13 @@ body .button {
   border-radius: 5px;
   padding: 18px 32px;
 }
+body .button2 {
+  font-size: 1.375rem;
+  background: rgb(221, 169, 0);
+  color: #fff;
+  border-radius: 5px;
+  padding: 10px 20px;
+}
 
 body .button:hover {
   background: #0090aa;
