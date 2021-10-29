@@ -1,4 +1,4 @@
-# サンプル（プロダクト名）
+# スケマ！ - Keep Time to Meet -
 
 [![Sukema Logo](./docs_img/sukema.png)](#)
 
@@ -35,21 +35,13 @@
 
 ## 使用技術
 ### Written By
-<img src="./docs_img/Python_Logo.png" height=100/>
-<img src="https://www.w3.org/html/logo/badge/html5-badge-h-css3-semantics.png" height="100" alt="HTML5 Powered with CSS3 / Styling, and Semantics" title="HTML5 Powered with CSS3 / Styling, and Semantics"/>
-<img src="./docs_img/sass_logo.png" height=100/>
+<img src="./docs_img/Python_Logo.png" height=100/><img src="https://www.w3.org/html/logo/badge/html5-badge-h-css3-semantics.png" height="100" alt="HTML5 Powered with CSS3 / Styling, and Semantics" title="HTML5 Powered with CSS3 / Styling, and Semantics"/><img src="./docs_img/sass_logo.png" height=100/>
 
 ### フレームワーク・ライブラリ・モジュール
-<img src="./docs_img/flask_logo.svg.png" height=100/>
-<img src="./docs_img/SQLite370.svg.png" height=100/>
-<img src="./docs_img/Bootstrap_logo.svg.png" height=100/>
+<img src="./docs_img/Flask_logo.svg.png" height=100/><img src="./docs_img/SQLite370.svg.png" height=100/><img src="./docs_img/Bootstrap_logo.svg.png" height=100/>
 
 ### 開発ツール
-<img src="./docs_img/vscode.png" height=100/>
-<img src="./docs_img/Docker_logo.png" height=100/>
-<img src="./docs_img/GitHub_logo.png" height=100/>
-<img src="./docs_img/Slack_Logo.png" height=100/>
-<img src="./docs_img/npm-logo-red.png" height=100/>
+<img src="./docs_img/vscode.png" height=100/><img src="./docs_img/Docker_Logo.png" height=100/><img src="./docs_img/GitHub_Logo.png" height=100/><img src="./docs_img/Slack_Logo.png" height=100/><img src="./docs_img/npm-logo-red.png" height=100/>
 
 - miro
 
