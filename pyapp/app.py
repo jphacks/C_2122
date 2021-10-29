@@ -190,6 +190,14 @@ def reserve():
     conn.commit()
     conn.close()
     return flask.render_template('<reserve {}>', abs_path=get_abs)"""
+    conn = sqlite3.connect('chat_test.db')
+    c = conn.cursor()
+    user_id = flask_login.current_user.get_id()
+    c.execute(
+        "select reserve.id, purpose.content from reserve inner join purpose on (reserve.purpose_id1 = purpose.id) or (reserve.purpose_id2 = purpose.id) where purpose.user_id = {}".format(user_id))
+    room_list = c.fetchall()
+    print(room_list)
+    c.close()
     if(flask.request.method == "POST"):
         # ユーザーチェック
         conn = sqlite3.connect('chat_test.db')
