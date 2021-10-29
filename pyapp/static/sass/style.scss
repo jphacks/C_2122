@@ -34,14 +34,15 @@ body {
 
     // index.html
     #home {
-        background-image: linear-gradient(#c9ffbf, #ffafbd);
+        //background-image: linear-gradient(#c9ffbf, #ffafbd);
+        background-image: url(/static/images/image.png);
         min-height: 100vh;
         .visibility-hidden {
             visibility: hidden;
         }
         .home-content {
             text-align: center;
-            margin-top: 14%;
+            margin-top: 40%;
             p {
                 font-size: 1.125rem;
                 margin: 10px 0 42px;

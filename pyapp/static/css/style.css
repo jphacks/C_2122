@@ -39,8 +39,7 @@ body .big-bg {
 }
 
 body #home {
-  background-image: -webkit-gradient(linear, left top, left bottom, from(#c9ffbf), to(#ffafbd));
-  background-image: linear-gradient(#c9ffbf, #ffafbd);
+  background-image: url(/static/images/image.png);
   min-height: 100vh;
 }
 
@@ -50,7 +49,7 @@ body #home .visibility-hidden {
 
 body #home .home-content {
   text-align: center;
-  margin-top: 14%;
+  margin-top: 40%;
 }
 
 body #home .home-content p {
