@@ -243,13 +243,12 @@ def match():
     )
     room_list = c.fetchall()
     c.execute(
-        "select purpose.id, purpose.date, purpose.user_id, purpose.content, purpose.reserved_id, user.username from purpose inner join user on purpose.id = user.id where reserved_id is null"
+        "select purpose.id, purpose.date, purpose.user_id, purpose.content, purpose.reserved_id, user.username from purpose inner join user on purpose.user_id = user.id where reserved_id is null"
     )
     purpose_list = c.fetchall()
     to_me = []
     for r in room_list:
         for p in purpose_list:
-            print(p[2], user_id)
             if p[2] == user_id and r[3] == p[0]:
                 r = list(r)
                 to_me.append(r)
