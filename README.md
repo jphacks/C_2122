@@ -1,7 +1,7 @@
 # スケマ！ - Keep Time to Meet -
 
-<iframe width="100%" height="100%" src="https://www.youtube.com/embed/e-BE-7SorJo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-
+[![Sukema Logo](./docs_img/sukema.png)](https://www.youtube.com/watch?v=e-BE-7SorJo)
+ 
 ## 製品概要 - タイムシェア x Tech -
 ### 背景(製品開発のきっかけ、課題等）
 > 「7時に起きようと思ったらもう8時でした。」</br>
